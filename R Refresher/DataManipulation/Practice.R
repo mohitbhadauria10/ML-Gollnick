@@ -9,3 +9,7 @@ str(babynames)
 most_popular_females = babynames%>%
   filter(year==2014)%>%
   filter(sex == "F")
+
+
+## Understanding n-cross Validation
+# Consider 
