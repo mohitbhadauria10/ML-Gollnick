@@ -1,0 +1,127 @@
+---
+title: 'Data Manipulation'
+author: "Bert Gollnick"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: hide
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+rm(list = ls())
+```
+
+# Introduction
+
+_dplyr_ is one of the most popular and most useful packages in the R-universe. It covers all aspects of data manipulation: filtering, selection, sorting and many more.
+
+* Objectives: data manipulation with _dplyr_
+* Requirements: none
+
+In our example we will find out most popular girl-names from 2014 and get more details of their popularity from 1880 to 2014.
+
+# Packages
+
+We will analyse baby names from package _babynames_. Please make sure you have installed it before trying to load it. The same holds for _dplyr_.
+
+* _babynames_: includes data for this tutorial
+* _dplyr_: includes all data manipulation 
+
+```{r}
+library(babynames)  # data for this tutorial
+library(dplyr)  # data manipulation
+library(ggplot2)  # visualisation of results
+```
+
+# Data Preparation
+
+You can load the dataframe using _data_ and get an overview of structure with _tbl_df_.
+```{r}
+# add code here
+data("babynames")
+glimpse(babynames)
+str(babynames)
+```
+
+There are five columns: _year_, _sex_, _name_, a count _n_, and corresponding proportion _prop_.
+
+
+## Filtering
+
+We want to keep only data from 2014 and can get this with _filter_. First, take a look at the pipeless version. The first argument is the data, followed by the filter to be applied.
+
+```{r}
+# add code here
+## Getting the data from year 2014
+most_popular_females = babynames%>%
+  filter(year==2014)
+```
+
+We have a dataframe with all names, but only from 2014. For the remainder we will always use piping where applicable.
+
+We also have to filter for sex, so add an additional filter.
+
+```{r}
+# add code here
+
+```
+
+Hint: some identical function names are part of other packages as well, e.g. _filter_ and might be masked by them. This means if you just call _filter_ the filter function from a different package is used instead of _dplyr_. Of course this does not work. Some workarounds: make sure that only _dplyr_ is loaded; make sure _dplyr_ is loaded before the other packages with identical function names. Another option to avoid trouble is to specifically define _filter_ function from _dplyr_ package by stating _dplyr::filter()_.
+
+## Sorting
+
+Data can be sorted with _arrange_. This function can have several sorting columns. Default-order is ascending. If descending is required, it can be done with _desc()_.
+
+In our example data is sorted according to _sex_ and descending proportion _prop_.
+
+```{r}
+# add code here
+
+```
+
+## Column Selection
+
+Often, not all columns are needed for further analysis. _select_ can be applied to reduce number of columns. It can be done by defining columns to be kept or by defining columns to be excluded.
+
+In our example only _name_ is kept. An alternative would have been _select(-year, -sex, -n, -prop)_.
+
+```{r}
+# add code here
+
+```
+
+Only the Top5 will be analysed. So at the end _head_ is applied.
+```{r}
+# add code here
+
+```
+
+These are in decreasing order the most famous girlnames of 2014.
+
+## Plot Results
+
+Now, the development of these names should be shown. Original dataframe is filtered for these names. Function _mutate_  can create new variables.
+
+```{r}
+# add code here
+
+```
+
+Plot is created with _ggplot_. It shows Top5 names of 2014 and their development since 1880.
+```{r}
+ggplot(babies_to_plot, aes(year, prop, color = name)) +
+	geom_line(size = 2) +
+	xlab ("Year [-]") + 
+	ylab ("Proportion [%]") + 
+	ggtitle ("Most Popular Female Names in 2014, and Before") + 
+	theme_bw()
+```
+
+Emma was very famous in 1880 and following decades and only recently experienced a revival. The other Top5 names got famous only recently. 
+
+# Conclusion
+
+We learned _dplyr_ package and some of its very important functions. There is more to discover. For a quick overview take a look at "Data Manipulation with dplyr, tidyr" cheatsheet (Help --> Cheatsheets).
